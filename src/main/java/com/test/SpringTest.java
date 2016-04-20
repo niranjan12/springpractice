@@ -1,4 +1,4 @@
-package com.nira;
+package com.test;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
