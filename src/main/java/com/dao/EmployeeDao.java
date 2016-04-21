@@ -2,10 +2,14 @@ package com.dao;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.orm.hibernate3.HibernateTemplate;
+
 import com.dto.Employee;
 
 public class EmployeeDao {
-	
+	@Autowired
+	private HibernateTemplate template;
 	public void registerEmployee(Employee e){}
 	public Employee getEmployeeById(int id){
 		return null;
