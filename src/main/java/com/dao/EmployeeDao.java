@@ -10,7 +10,10 @@ import com.dto.Employee;
 public class EmployeeDao {
 	@Autowired
 	private HibernateTemplate template;
-	public void registerEmployee(Employee e){}
+	public void registerEmployee(Employee e){
+		template.save(e);
+		System.out.println("EmployeeObj Stored sucessfully..");
+	}
 	public Employee getEmployeeById(int id){
 		return null;
 	}
