@@ -2,14 +2,17 @@ package com.serviceImpl;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.dao.EmployeeDao;
 import com.dto.Employee;
 import com.service.EmployeeService;
 
 public class EmployeeServiceImpl implements EmployeeService{
-
+    @Autowired
+	public EmployeeDao dao;
 	public void registerEmployee(Employee e) {
-		// TODO Auto-generated method stub
-		
+		dao.registerEmployee(e);
 	}
 
 	public Employee getEmployeeById(int id) {

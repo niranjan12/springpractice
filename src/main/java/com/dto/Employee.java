@@ -4,7 +4,28 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.NamedNativeQueries;
+import javax.persistence.NamedNativeQuery;
 import javax.persistence.Table;
+
+
+@NamedNativeQueries({
+	@NamedNativeQuery(
+	name = "finduserbyname",
+	query = "select * from employee e where e.name = :nm",
+        resultClass = Employee.class
+	),
+	@NamedNativeQuery(
+			name = "finduserbydept",
+			query = "select * from employee e where e.dept = :dt",
+		        resultClass = Employee.class
+			),
+	@NamedNativeQuery(
+			name = "finduserbytype",
+			query = "select * from employee e where e.empType = :tp",
+	        resultClass = Employee.class
+			)		
+})
 
 @Entity
 @Table(name = "EMPLOYEE")

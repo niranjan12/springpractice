@@ -1,5 +1,7 @@
 package com.test;
 
+import java.util.List;
+
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -17,11 +19,15 @@ public class SaveEmployeeTest {
 		e.setAddress("Hyd");
 		e.setIsActive("Y");
 		e.setJoinDate("Date");
-		e.setName("Makara");
+		e.setName("Niranjan Sahu");
 		e.setReleveDate("left date");
-		e.setSal(35000);
-		dao.registerEmployee(e);
-		System.out.println(dao);
+		e.setSal(40000);
+		e.setId(7);
+		//dao.registerEmployee(e);
+		//dao.updateEmployee(e);
+		//Employee emp=dao.getEmployeeByName("Niranjan Sahu");
+		List<Employee> emp=dao.getEmployeeByType("contract");
+		System.out.println("Employee With Name is :-"+emp.iterator().next().getEmpType());
 
 	}
 
