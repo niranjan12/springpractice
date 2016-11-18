@@ -9,8 +9,177 @@
 		<!-- Hibernate / JPA -->
 		<!-- <hibernate.version>4.3.5.Final</hibernate.version> -->
 		<hibernate.version>3.6.9.Final</hibernate.version>
-		
+		<build.number>SNAPSHOT</build.number>
+		<build.timestamp>${maven.build.timestamp}</build.timestamp>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<webapp.dir>${project.build.directory}/${project.build.finalName}-exploded.war</webapp.dir>
 	</properties>
+	
+	<scm>
+		<connection>scm:git:https://github.com/niranjan12/springpractice.git</connection>
+		<developerConnection>scm:git:https://github.com/niranjan12/springpractice.git</developerConnection>
+		<url>scm:git:https://github.com/niranjan12/springpractice.git</url>
+	</scm>
+	
+		<build>
+
+		<finalName>${project.artifactId}</finalName>
+
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+				<includes>
+					<include>**/version.properties</include>
+				</includes>
+			</resource>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>false</filtering>
+				<excludes>
+					<exclude>**/version.properties</exclude>
+				</excludes>
+			</resource>
+		</resources>
+
+		<plugins>
+			<plugin>
+				<artifactId>maven-war-plugin</artifactId>
+				<configuration>
+					<archive>
+						<!-- Note, manifest not written to exploded directory. http://jira.codehaus.org/browse/MWAR-167 -->
+						<manifestEntries>
+							<Specification-Title>${project.name}</Specification-Title>
+							<Specification-Version>${project.version}</Specification-Version>
+							<Implementation-Version>${build.number}</Implementation-Version>
+							<Implementation-Build>${buildNumber}</Implementation-Build>
+						</manifestEntries>
+					</archive>
+					<webappDirectory>${webapp.dir}</webappDirectory>
+					<warSourceExcludes>**/style/**,**/scripts/**</warSourceExcludes>
+					<webXml>WebContent\WEB-INF\web.xml</webXml>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>buildnumber-maven-plugin</artifactId>
+				<version>1.2</version>
+				<executions>
+					<execution>
+						<phase>generate-resources</phase>
+						<goals>
+							<goal>create</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<timestampFormat>yyyyMMddHHmmssSSS</timestampFormat>
+					<timestampPropertyName>releaseTimestamp</timestampPropertyName>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>ro.isdc.wro4j</groupId>
+				<artifactId>wro4j-maven-plugin</artifactId>
+				<version>1.7.1</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>run</goal>
+						</goals>
+						<phase>generate-resources</phase>
+					</execution>
+				</executions>
+				<configuration>
+					<wroManagerFactory>ro.isdc.wro.maven.plugin.manager.factory.ConfigurableWroManagerFactory</wroManagerFactory>
+					<wroFile>${basedir}/src/main/resources/wro.xml</wroFile>
+					<extraConfigFile>${basedir}/src/main/resources/default/wro.properties</extraConfigFile>
+					<targetGroups>style.min,script.min</targetGroups>
+					<cssDestinationFolder>${project.build.directory}/${project.build.finalName}-exploded.war/style/</cssDestinationFolder>
+					<jsDestinationFolder>${project.build.directory}/${project.build.finalName}-exploded.war/scripts/</jsDestinationFolder>
+					<contextFolder>${basedir}/src/main/webapp/</contextFolder>
+					<ignoreMissingResources>false</ignoreMissingResources>
+				</configuration>
+				<dependencies>
+					<dependency>
+						<groupId>ro.isdc.wro4j</groupId>
+						<artifactId>wro4j-extensions</artifactId>
+						<version>1.7.1</version>
+						<exclusions>
+							<exclusion>
+								<groupId>org.jruby.jcodings</groupId>
+								<artifactId>jcodings</artifactId>
+							</exclusion>
+							<exclusion>
+								<groupId>com.github.jnr</groupId>
+								<artifactId>jffi</artifactId>
+							</exclusion>
+						</exclusions>
+					</dependency>
+				</dependencies>
+			</plugin>
+			<plugin>
+				<artifactId>maven-resources-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>copy-resources</id>
+						<phase>process-resources</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<overwrite>true</overwrite>
+							<outputDirectory>${basedir}/target/classes</outputDirectory>
+							<resources>
+								<resource>
+									<directory>src/main/resources/default</directory>
+									<filtering>false</filtering>
+									<excludes>
+										<exclude>META-INF/*</exclude>
+										<exclude>**/version.properties</exclude>
+									</excludes>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			
+		</plugins>
+
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>1.0.0</version>
+					<configuration>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>ro.isdc.wro4j</groupId>
+										<artifactId>wro4j-maven-plugin</artifactId>
+										<versionRange>[1.0,)</versionRange>
+										<goals>
+											<goal>run</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<execute />
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+
+	</build>
+	
+	
+	
+	
 
 	<dependencies>
 		<!-- Shared version number properties -->
@@ -167,4 +336,5 @@
             <version>1.4</version>
         </dependency>
 	</dependencies>
+	<packaging>war</packaging>
 </project>
